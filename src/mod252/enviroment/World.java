@@ -52,7 +52,7 @@ public class World {
 	}
 
 	private static void AddSpaceShip() {
-		GenerateSignal(spaceShipCoordinates, signalRange);
+		GenerateSignal(spaceShipCoordinates, signalRange, 100);
 		world[spaceShipCoordinates.x][spaceShipCoordinates.y]
 				.addContents(Contents.spaceship);
 	}
@@ -85,7 +85,7 @@ public class World {
 		}
 	}
 
-	private static void GenerateSignal(Point origin, int range) {
+	private static void GenerateSignal(Point origin, int range, double signalStrength) {
 		int x = origin.x;
 		int y = origin.y;
 
@@ -94,17 +94,16 @@ public class World {
 
 		try {
 
-			if (world[x][y].getSignalStrength() == 0) {
+			if (world[x][y].getSignalStrength() < signalStrength) {
 				world[x][y].addContents(Contents.radioSignal);
-				int signalModifier = (signalRange - range) + 1;
-				double signalStrength = 100 / signalModifier;
 				world[x][y].setSignalStrength(signalStrength);
 			}
 
-			GenerateSignal(new Point(x, y + 1), range - 1);
-			GenerateSignal(new Point(x, y - 1), range - 1);
-			GenerateSignal(new Point(x - 1, y), range - 1);
-			GenerateSignal(new Point(x + 1, y), range - 1);
+			GenerateSignal(new Point(x, y + 1), range - 1, signalStrength / 2);
+			GenerateSignal(new Point(x, y - 1), range - 1, signalStrength / 2);
+			GenerateSignal(new Point(x - 1, y), range - 1, signalStrength / 2);
+			GenerateSignal(new Point(x + 1, y), range - 1, signalStrength / 2);
+			
 		} catch (Exception e) {
 			// Ignore for now
 		}

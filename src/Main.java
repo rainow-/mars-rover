@@ -14,6 +14,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		World.InitializeWorld();
+		World.PrintWorld();
+		
+		
 
 		// Get a hold on JADE runtime
 		Runtime rt = Runtime.instance();
@@ -24,6 +27,7 @@ public class Main {
 		ContainerController mainContainer = rt.createMainContainer(profile);
 		
 		// create agent
+		
 		try {
 			AgentController ac1 = mainContainer.createNewAgent("mars-rover-1",
 					"mod252.agents.RoverAgent", new Object[1]);
@@ -54,6 +58,7 @@ public class Main {
 				e.printStackTrace();
 			}			
 		}
+		
 	}
 
 }

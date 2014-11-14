@@ -10,6 +10,7 @@ public class GridCell {
 	private ArrayList<RoverAgent> agents;
 	
 	private double signalStrength = 0;
+	private int numberOfCrumbs = 0;
 	
 	public GridCell(Contents contents)
 	{
@@ -44,6 +45,21 @@ public class GridCell {
 		return contents;
 	}
 
+	public int getNumberOfCrumbs() {
+		return numberOfCrumbs;
+	}
+
+	public void setNumberOfCrumbs(int numberOfCrumbs) {
+		this.numberOfCrumbs = numberOfCrumbs;
+	}
+	
+	public int deductNumberOfCrumbs()
+	{
+		int tmp = numberOfCrumbs;
+		numberOfCrumbs--;
+		return tmp;
+	}
+
 	public void addContents(Contents contents) {
 		this.contents.add(contents);
 	}
@@ -63,7 +79,7 @@ public class GridCell {
 	
 	public boolean hasCrumbs()
 	{
-		return contents.contains(Contents.crumbs);
+		return numberOfCrumbs > 0;
 	}
 	
 	public boolean isSpaceship()
@@ -79,21 +95,22 @@ public class GridCell {
 			return agents.get(agents.size() - 1).getLocalName().split("-")[2];
 		}
 		
+		if(numberOfCrumbs > 0)
+			return "C";
+		
 		if(contents.size() == 0)
 			return " ";
 
-/*		
+	
 		if(signalStrength > 0)
 			return signalStrength + "";
-*/
+
 		switch(contents.get(contents.size() - 1))
 		{
 		case spaceship:
 			return "S";
 		case rock:
 			return "R";
-		case crumbs:
-			return "C";
 		case radioSignal:
 			return "G";
 		default:
