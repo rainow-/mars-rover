@@ -128,35 +128,39 @@ public class World {
 	}
 	
 	//Methods to move agent
-	public static void MoveLeft(RoverAgent rover)
+	public static Point MoveLeft(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x - 1 , rover.getPosition().y);
 		MoveAgent(rover, newPoint);
+		return newPoint;
 	}
 	
-	public static void MoveUp(RoverAgent rover)
+	public static Point MoveUp(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x, rover.getPosition().y + 1);
 		MoveAgent(rover, newPoint);
+		return newPoint;
 	}
 	
-	public static void MoveRight(RoverAgent rover)
+	public static Point MoveRight(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x + 1 , rover.getPosition().y);
 		MoveAgent(rover, newPoint);
+		return newPoint;
 	}
 	
-	public static void MoveDown(RoverAgent rover)
+	public static Point MoveDown(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x, rover.getPosition().y - 1);
 		MoveAgent(rover, newPoint);
+		return newPoint;
 	}
 	
 	private static void MoveAgent(RoverAgent rover, Point newPoint)
 	{
 		Point currentPoint = rover.getPosition();
 		
-		world[currentPoint.x][currentPoint.y].removeAgents();
+		world[currentPoint.x][currentPoint.y].removeAgents(rover);
 		world[newPoint.x][newPoint.y].addAgent(rover);
 	}
 
@@ -170,10 +174,10 @@ public class World {
 	}
 
 	public static GridCell LookUp(Point p) {
-		return world[p.x][p.y];
+		return world[p.x][p.y + 1];
 	}
 
 	public static GridCell LookDown(Point p) {
-		return world[p.x][p.y];
+		return world[p.x][p.y - 1];
 	}
 }

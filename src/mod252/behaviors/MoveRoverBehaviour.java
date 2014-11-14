@@ -2,6 +2,7 @@ package mod252.behaviors;
 
 import mod252.agents.RoverAgent;
 import mod252.enviroment.World;
+import mod252.utils.RandomGenerator;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -18,31 +19,32 @@ public class MoveRoverBehaviour extends CyclicBehaviour {
 	
 	@Override
 	public void action() {
+		int randomNumber = RandomGenerator.GenerateRandomNumber(4) + 1;
 		
-		//World w = getWorld();
-		//find were we are
-		//location = myAgent.getLocation();
+		switch(randomNumber)
+		{
+		case 1 :
+			myAgent.setPosition(World.MoveLeft(myAgent));
+			break;
+		case 2 :
+			myAgent.setPosition(World.MoveRight(myAgent));
+			break;
+		case 3 :
+			myAgent.setPosition(World.MoveDown(myAgent));
+			break;
+		case 4 :
+			myAgent.setPosition(World.MoveUp(myAgent));
+			break;
+		default :
+			//do nothing
+		}
 		
-		//search for new path
-		//assert(location);
-		//Jess.run();
-		
-		
-		
-		//inform agents
-		//ACL messages 
-		ACLMessage inform = new ACLMessage(ACLMessage.INFORM);
-		//inform.addReceiver(myAgent.getSpaceShipAgent());
-		inform.setConversationId("rover-" + myAgent.getName());
-//		inform.setContent(updatePackage);
-		
-		
-		
-		
-		
-		//update information
-		//myAgent.setLocation();
-		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	

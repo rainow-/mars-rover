@@ -13,8 +13,6 @@ import jade.wrapper.*;
 public class Main {
 
 	public static void main(String[] args) {
-
-		Scanner scanner = new Scanner(System.in);
 		World.InitializeWorld();
 
 		// Get a hold on JADE runtime
@@ -27,7 +25,7 @@ public class Main {
 
 		// create agent
 		try {
-			AgentController ac1 = mainContainer.createNewAgent("mars-rover",
+			AgentController ac1 = mainContainer.createNewAgent("mars-rover-1",
 					"mod252.agents.RoverAgent", new Object[1]);
 			
 			AgentController ac2 = mainContainer.createNewAgent("mars-rover-2", "mod252.agents.RoverAgent", new Object[1]);
@@ -37,16 +35,24 @@ public class Main {
 			ac2.start();
 			ac3.start();
 			
+			Thread.sleep(3000);
+			
 		} catch (jade.wrapper.StaleProxyException e) {
 			System.err.println("Error launching agent...");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		while(true)
 		{
-			World.PrintWorld();
-			System.out.println("**************************");
-			System.out.println("Press enter for next step");
-			scanner.nextLine();
+			try {
+				World.PrintWorld();
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
 	}
 

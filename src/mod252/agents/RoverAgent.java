@@ -3,6 +3,7 @@ package mod252.agents;
 
 import java.awt.Point;
 
+import mod252.behaviors.MoveRoverBehaviour;
 import mod252.behaviors.RoverBehavior;
 import mod252.enviroment.World;
 import jess.*;
@@ -52,16 +53,13 @@ public class RoverAgent extends Agent {
 		  
 		  //World world = new World();
 		  position = World.getSpaceShipCoordinates();
+		  World.AddAgents(this);
 		  
-		  try {
-			  DFService.register(this, mod252.utils.DFUtils.getDF(getAID(), getLocalName(), "mars-rover"));
-		  } catch (FIPAException fe) {
-			  fe.printStackTrace();
-		  }
+		  System.out.println("Agent " + this.getLocalName() + " is ready and is starting at position " + this.getPosition());
 		  
 	    // add the behaviour
 	    // 1 is the number of steps that must be executed at each run of
 	    // the Jess engine before giving back the control to the Java code
-	    addBehaviour(new RoverBehavior(this,"mod252/rules/roverAgent.clp",1)); 
+	    addBehaviour(new MoveRoverBehaviour(this,"mod252/rules/roverAgent.clp")); 
 	  }
 }

@@ -31,9 +31,9 @@ public class GridCell {
 		this.agents.add(agent);
 	}
 	
-	public void removeAgents()
+	public void removeAgents(RoverAgent agent)
 	{
-		agents = new ArrayList<RoverAgent>();
+		this.agents.remove(agent);
 	}
 
 	public ArrayList<Contents> getContents() {
@@ -76,7 +76,7 @@ public class GridCell {
 		
 		if(agents.size() > 0)
 		{
-			return agents.get(agents.size() - 1).getLocalName();
+			return agents.get(agents.size() - 1).getLocalName().split("-")[2];
 		}
 		
 		if(contents.size() == 0)
