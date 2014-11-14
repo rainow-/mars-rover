@@ -4,6 +4,7 @@ package mod252.agents;
 import java.awt.Point;
 
 import mod252.behaviors.RoverBehavior;
+import mod252.enviroment.World;
 import jess.*;
 import jade.core.*;
 import jade.domain.DFService;
@@ -33,14 +34,24 @@ public class RoverAgent extends Agent {
 	public void setHasSample(boolean hasSample) {
 		this.hasSample = hasSample;
 	}
+	
+	
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
 
 	/**
 	 * adds the JessBehaviour and that's all.
 	 **/
 	  protected void setup() {
 		  
-		  World world = new World();
-		  position = world.getSpaceShipPosition();
+		  //World world = new World();
+		  position = World.getSpaceShipCoordinates();
 		  
 		  try {
 			  DFService.register(this, mod252.utils.DFUtils.getDF(getAID(), getLocalName(), "mars-rover"));

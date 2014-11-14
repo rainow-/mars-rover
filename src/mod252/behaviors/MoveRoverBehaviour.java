@@ -19,7 +19,7 @@ public class MoveRoverBehaviour extends CyclicBehaviour {
 	@Override
 	public void action() {
 		
-		World w = getWorld();
+		//World w = getWorld();
 		//find were we are
 		//location = myAgent.getLocation();
 		

@@ -2,11 +2,14 @@ package mod252.enviroment;
 
 import java.util.ArrayList;
 
+import mod252.agents.RoverAgent;
 import mod252.utils.Enums.Contents;;
 
 public class GridCell {
 	private ArrayList<Contents> contents;
-	private static double signalStrength = 0;
+	private ArrayList<RoverAgent> agents;
+	
+	private double signalStrength = 0;
 	
 	public GridCell(Contents contents)
 	{
@@ -17,9 +20,23 @@ public class GridCell {
 	public GridCell()
 	{
 		this.contents = new ArrayList<Contents>();
+		agents = new ArrayList<RoverAgent>();
+	}
+	
+	public ArrayList<RoverAgent> getAgents() {
+		return agents;
 	}
 
-	public ArrayList<Contents> investigateCell() {
+	public void addAgent(RoverAgent agent) {
+		this.agents.add(agent);
+	}
+	
+	public void removeAgents()
+	{
+		agents = new ArrayList<RoverAgent>();
+	}
+
+	public ArrayList<Contents> getContents() {
 		if(contents.size() == 0)
 		{
 			return new ArrayList<Contents>() {{ add(Contents.empty);}};
@@ -31,23 +48,45 @@ public class GridCell {
 		this.contents.add(contents);
 	}
 	
-	public static double getSignalStrength() {
+	public double getSignalStrength() {
 		return signalStrength;
 	}
 
-	public static void setSignalStrength(double signalStrength) {
-		GridCell.signalStrength = signalStrength;
+	public void setSignalStrength(double signalStrength) {
+		this.signalStrength = signalStrength;
+	}
+	
+	public boolean hasRocks()
+	{	
+		return contents.contains(Contents.rock);
+	}
+	
+	public boolean hasCrumbs()
+	{
+		return contents.contains(Contents.crumbs);
+	}
+	
+	public boolean isSpaceship()
+	{
+		return contents.contains(Contents.spaceship);
 	}
 
 	public String toString()
 	{
+		
+		if(agents.size() > 0)
+		{
+			return agents.get(agents.size() - 1).getLocalName();
+		}
+		
 		if(contents.size() == 0)
 			return " ";
-		
+
+/*		
 		if(signalStrength > 0)
 			return signalStrength + "";
-
-		switch(contents.get(contents.size() -1))
+*/
+		switch(contents.get(contents.size() - 1))
 		{
 		case spaceship:
 			return "S";
