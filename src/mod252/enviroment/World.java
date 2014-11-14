@@ -17,8 +17,6 @@ public class World {
 	private static int numberOfRocks = 10;
 
 	private static GridCell[][] world;
-	private static List<RoverAgent> agents;
-	
 	
 	public static void InitializeWorld() {
 		world = new GridCell[width][height];
@@ -30,12 +28,10 @@ public class World {
 		AddSpaceShip();
 		AddRocks();
 		
-		agents = new ArrayList<RoverAgent>();
 	}
 	
 	public static void AddAgents(RoverAgent rover)
 	{
-		agents.add(rover);
 		world[rover.getPosition().x][rover.getPosition().y].addAgent(rover);
 	}
 	
@@ -59,10 +55,6 @@ public class World {
 
 	public static Point getSpaceShipCoordinates() {
 		return spaceShipCoordinates;
-	}
-
-	public static GridCell getPercept(Point p) {
-		return world[p.x][p.y];
 	}
 
 	private static void GenerateRockFormation(Point origin, int rocks) {
@@ -95,7 +87,6 @@ public class World {
 		try {
 
 			if (world[x][y].getSignalStrength() < signalStrength) {
-				world[x][y].addContents(Contents.radioSignal);
 				world[x][y].setSignalStrength(signalStrength);
 			}
 
@@ -178,5 +169,10 @@ public class World {
 
 	public static GridCell LookDown(Point p) {
 		return world[p.x][p.y - 1];
+	}
+	
+	public static GridCell GetGridCell(Point p)
+	{
+		return world[p.x][p.y];
 	}
 }

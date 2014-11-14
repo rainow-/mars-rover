@@ -44,6 +44,11 @@ public class GridCell {
 		}
 		return contents;
 	}
+	
+	public void removeContent(Contents content)
+	{
+		this.contents.remove(content);
+	}
 
 	public int getNumberOfCrumbs() {
 		return numberOfCrumbs;
@@ -86,6 +91,11 @@ public class GridCell {
 	{
 		return contents.contains(Contents.spaceship);
 	}
+	
+	public boolean isObstacle()
+	{
+		return (contents.contains(Contents.rock) || contents.contains(Contents.spaceship));
+	}
 
 	public String toString()
 	{
@@ -103,7 +113,7 @@ public class GridCell {
 
 	
 		if(signalStrength > 0)
-			return signalStrength + "";
+			return "G";
 
 		switch(contents.get(contents.size() - 1))
 		{
@@ -111,8 +121,6 @@ public class GridCell {
 			return "S";
 		case rock:
 			return "R";
-		case radioSignal:
-			return "G";
 		default:
 			return " ";
 		}
