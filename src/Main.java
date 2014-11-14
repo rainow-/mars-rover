@@ -22,7 +22,7 @@ public class Main {
 		// Create a new non-main container, connecting to the default
 		// main container (i.e. on this host, port 1099)
 		ContainerController mainContainer = rt.createMainContainer(profile);
-
+		
 		// create agent
 		try {
 			AgentController ac1 = mainContainer.createNewAgent("mars-rover-1",
