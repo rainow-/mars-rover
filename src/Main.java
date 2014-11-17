@@ -32,12 +32,12 @@ public class Main {
 			AgentController ac1 = mainContainer.createNewAgent("mars-rover-1",
 					"mod252.agents.RoverAgent", new Object[1]);
 			
-			AgentController ac2 = mainContainer.createNewAgent("mars-rover-2", "mod252.agents.RoverAgent", new Object[1]);
-			AgentController ac3 = mainContainer.createNewAgent("mars-rover-3", "mod252.agents.RoverAgent", new Object[1]);
+			//AgentController ac2 = mainContainer.createNewAgent("mars-rover-2", "mod252.agents.RoverAgent", new Object[1]);
+			//AgentController ac3 = mainContainer.createNewAgent("mars-rover-3", "mod252.agents.RoverAgent", new Object[1]);
 			// start the agent
 			ac1.start();
-			ac2.start();
-			ac3.start();
+			//ac2.start();
+			//ac3.start();
 			
 			Thread.sleep(3000);
 			
@@ -54,7 +54,7 @@ public class Main {
 				World.PrintWorld();
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+//				TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
 		}

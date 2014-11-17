@@ -69,8 +69,8 @@ public class GridCell {
 		this.contents.add(contents);
 	}
 	
-	public double getSignalStrength() {
-		return signalStrength;
+	public float getSignalStrength() {
+		return (float)signalStrength;
 	}
 
 	public void setSignalStrength(double signalStrength) {
