@@ -33,6 +33,13 @@ public class MoveRoverBehaviour extends CyclicBehaviour {
 		bottom = World.LookDown(myAgent.getPosition());
 		current = World.LookHere(myAgent.getPosition());
 		
+		try {
+			jessUtil.updateSignal(current);
+		} catch (JessException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
 		if(left == null)
 			left = right;
 		if(right == null)
@@ -55,6 +62,8 @@ public class MoveRoverBehaviour extends CyclicBehaviour {
 				myAgent.setPosition(World.MoveUp(myAgent));
 			else if(dir.equals("down"))
 				myAgent.setPosition(World.MoveDown(myAgent));
+			
+			
 			
 		} catch (JessException e1) {
 			// TODO Auto-generated catch block

@@ -35,8 +35,10 @@ public class JessUtil {
             jess.batch(jessFile);
             String carrying = "(bind ?carrying false)";
             String came = "(bind ?from down)";
+            String signal = "(bind ?signal 0)";
             jess.executeCommand(carrying);
             jess.executeCommand(came);
+            jess.executeCommand(signal);
             jess.run();
         } catch (JessException ex) {
 
@@ -78,6 +80,12 @@ public class JessUtil {
         return dir; 
     }
     
+    public void updateSignal(GridCell current) throws JessException{
+    	String signal = "(bind ?signal " + current.getSignalStrength() + ")";
+    	jess.executeCommand(signal);
+    	jess.run();
+    }
+    
     /**
      * Checks if the rover should pickup a rock or not
      * @param gf
@@ -91,6 +99,7 @@ public class JessUtil {
         	act = (String)jess.fetch("act").externalAddressValue(null);
         	dir = (String)jess.fetch("dir").externalAddressValue(null);
         	String cameFrom = "(bind ?from " + dir + ")";
+
         	jess.executeCommand(cameFrom);
         }    
         else{

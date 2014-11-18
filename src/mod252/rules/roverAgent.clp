@@ -35,7 +35,6 @@
                 (assert (action (do nothing) (at here)))
             )
         else
-            (printout t "Rover is not carrying sample" crlf)
     		(find_base ?this_env)
         )
     else
@@ -58,7 +57,7 @@
      		(assert (action (do drop) (at ?this_env.direction)))
         else (if (and (= ?this_env.crumb true) (<> (opposite_direction ?from))) then
         	(assert (action (do follow_crumbs) (at ?this_env.direction)))
-        else (if (and (> ?this_env.signal ?signal-here) (= ?this_env.obstacle false)) then
+        else (if (and (> ?this_env.signal ?signal) (= ?this_env.obstacle false)) then
                 (assert (action (do follow_signal) (at ?this_env.direction)))
             else (assert (action (do turn_around) (at ?this_env.direction)))
             )
@@ -107,7 +106,7 @@
     (if (= ?here.do gather) then
 	   (assert (best_action (do gather) (at here)))
         else (if (= ?here.do drop) then
-            (assert (best_action) (do gather) (at here))
+            (assert (best_action) (do drop) (at here))
     	else
 	    (if (= ?carrying true) then
 	     	(carry_priority ?left ?right ?down ?up)
@@ -122,6 +121,7 @@
     (retract ?right)
     (retract ?down)
     (retract ?up)
+    (retract ?here)
 )
 
 (deffunction random_direction()
