@@ -121,29 +121,41 @@ public class World {
 	public static Point MoveLeft(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x - 1 , rover.getPosition().y);
-		MoveAgent(rover, newPoint);
-		return newPoint;
+		if(isInsideGrid(newPoint)){	
+			MoveAgent(rover, newPoint);
+			return newPoint;
+		}
+		return new Point(rover.getPosition().x, rover.getPosition().y);
 	}
 	
 	public static Point MoveUp(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x, rover.getPosition().y + 1);
-		MoveAgent(rover, newPoint);
-		return newPoint;
+		if(isInsideGrid(newPoint)){	
+			MoveAgent(rover, newPoint);
+			return newPoint;
+		}
+		return new Point(rover.getPosition().x, rover.getPosition().y);
 	}
 	
 	public static Point MoveRight(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x + 1 , rover.getPosition().y);
-		MoveAgent(rover, newPoint);
-		return newPoint;
+		if(isInsideGrid(newPoint)){	
+			MoveAgent(rover, newPoint);
+			return newPoint;
+		}
+		return new Point(rover.getPosition().x, rover.getPosition().y);
 	}
 	
 	public static Point MoveDown(RoverAgent rover)
 	{
 		Point newPoint = new Point(rover.getPosition().x, rover.getPosition().y - 1);
-		MoveAgent(rover, newPoint);
-		return newPoint;
+		if(isInsideGrid(newPoint)){		
+			MoveAgent(rover, newPoint);
+			return newPoint;
+		}
+		return new Point(rover.getPosition().x, rover.getPosition().y);
 	}
 	
 	private static void MoveAgent(RoverAgent rover, Point newPoint)
@@ -153,22 +165,38 @@ public class World {
 		world[currentPoint.x][currentPoint.y].removeAgents(rover);
 		world[newPoint.x][newPoint.y].addAgent(rover);
 	}
+	
+	private static boolean isInsideGrid(Point p){
+		if(p.x >= width || p.x < 0)
+			return false;
+		if(p.y >= height || p.y < 0)
+			return false;
+		return true;
+	}
 
 	// Methods to get perception easier
 	public static GridCell LookLeft(Point p) {
-		return world[p.x - 1][p.y];
+		if(isInsideGrid(new Point(p.x-1, p.y)))
+			return world[p.x - 1][p.y];
+		return null;
 	}
 
 	public static GridCell LookRight(Point p) {
-		return world[p.x + 1][p.y];
+		if(isInsideGrid(new Point(p.x+1, p.y)))
+			return world[p.x + 1][p.y];
+		return null;
 	}
 
 	public static GridCell LookUp(Point p) {
-		return world[p.x][p.y + 1];
+		if(isInsideGrid(new Point(p.x, p.y+1)))
+			return world[p.x][p.y + 1];
+		return null;
 	}
 
 	public static GridCell LookDown(Point p) {
-		return world[p.x][p.y - 1];
+		if(isInsideGrid(new Point(p.x, p.y-1)))
+			return world[p.x][p.y - 1];
+		return null;
 	}
 	
 	public static GridCell LookHere(Point p) {

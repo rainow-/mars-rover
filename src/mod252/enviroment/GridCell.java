@@ -108,13 +108,12 @@ public class GridCell {
 		if(numberOfCrumbs > 0)
 			return "C";
 		
-		if(contents.size() == 0)
+		if(signalStrength > 0)
 			return " ";
 
-	
-		if(signalStrength > 0)
-			return "G";
-
+		if(contents.size() == 0)
+			return " ";
+		
 		switch(contents.get(contents.size() - 1))
 		{
 		case spaceship:

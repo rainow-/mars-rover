@@ -25,13 +25,24 @@ public class MoveRoverBehaviour extends CyclicBehaviour {
 	@Override
 	public void action() {
 		
-		GridCell left = World.LookLeft(myAgent.getPosition());
-		GridCell right = World.LookRight(myAgent.getPosition());
-		GridCell top = World.LookUp(myAgent.getPosition());
-		GridCell bottom = World.LookDown(myAgent.getPosition());
-		GridCell current = World.LookHere(myAgent.getPosition());
+		GridCell left, right, top, bottom, current;
+
+		left = World.LookLeft(myAgent.getPosition());
+		right = World.LookRight(myAgent.getPosition());
+		top = World.LookUp(myAgent.getPosition());
+		bottom = World.LookDown(myAgent.getPosition());
+		current = World.LookHere(myAgent.getPosition());
 		
-		try {
+		if(left == null)
+			left = right;
+		if(right == null)
+			right = left;
+		if(top == null)
+			top = bottom;
+		if(bottom == null)
+			bottom = top;
+		
+		try{
 			jessUtil.search(left, right, top, bottom, current);
 			jessUtil.performAction(myAgent);	
 			String dir = jessUtil.getDirection();
@@ -48,7 +59,7 @@ public class MoveRoverBehaviour extends CyclicBehaviour {
 		} catch (JessException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		} 
 		
 		try {
 			Thread.sleep(1000);

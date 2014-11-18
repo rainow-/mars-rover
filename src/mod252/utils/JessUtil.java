@@ -120,7 +120,7 @@ public class JessUtil {
         }
         else
         {
-        	if(act.equals("explore") || act.equals("follow_signal")){
+        	if(act.equals("follow_signal") && rover.hasSample()){
         		World.GetGridCell(rover.getPosition()).setNumberOfCrumbs(2);
         	}
             else if(act.equals("follow_grain")){

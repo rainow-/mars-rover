@@ -26,7 +26,6 @@
     ?this_env <- (environment (signal ?this_signal) (obstacle ?this_obstacle) 
         (sample ?this_sample) (crumb ?this_crumb) (spaceship ?this_spaceship) (direction ?this_direction))
     =>
-    (printout t "Entering jess..." crlf)
 	(if	(= ?carrying true) then
         (printout t "Rover is carrying sample" crlf)
         (if (= ?this_direction here) then
@@ -43,6 +42,7 @@
      	(if (<> ?this_direction here ) then
             (find_sample ?this_env)
         	else (if(= ?this_sample true) then
+                (printout t "There is a sample here!!!!!!!!!!!!!!")
         		(assert (best_action (do gather) (at ?this_direction)))  
                 else
                 (assert (action (do nothing) (at here)))
