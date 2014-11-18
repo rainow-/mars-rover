@@ -30,7 +30,7 @@
         (printout t "Rover is carrying sample" crlf)
         (if (= ?this_direction here) then
             (if (= ?this_spaceship true) then
-        		(assert (best_action (do drop) (at ?this_direction)))
+        		(assert (action (do drop) (at ?this_direction)))
                 else
                 (assert (action (do nothing) (at here)))
             )
@@ -43,7 +43,7 @@
             (find_sample ?this_env)
         	else (if(= ?this_sample true) then
                 (printout t "There is a sample here!!!!!!!!!!!!!!")
-        		(assert (best_action (do gather) (at ?this_direction)))  
+        		(assert (action (do gather) (at ?this_direction)))  
                 else
                 (assert (action (do nothing) (at here)))
             )
@@ -104,11 +104,18 @@
     ?left <- (action (do ?do_left) (at left)) 
     ?here <- (action (do ?) (at here))
     =>
-    (if (= ?carrying true) then
-     	(carry_priority ?left ?right ?down ?up)
-        else 
-        (not_carry_priority ?left ?right ?down ?up)
-        (if (> (?explores size) 0) then (random_direction))
+    (if (= ?here.do gather) then
+	   (assert (best_action (do gather) (at here)))
+        else (if (= ?here.do drop) then
+            (assert (best_action) (do gather) (at here))
+    	else
+	    (if (= ?carrying true) then
+	     	(carry_priority ?left ?right ?down ?up)
+	        else 
+	        (not_carry_priority ?left ?right ?down ?up)
+	        (if (> (?explores size) 0) then (random_direction))
+            )
+	    )
     )
     
     (retract ?left)
