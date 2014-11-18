@@ -1,6 +1,7 @@
 (bind ?explores (new java.util.ArrayList))
 (bind ?rand (new java.util.Random))
-(bind ?came-from here)
+(bind ?from down)
+(bind ?carrying false)
 
 (deftemplate environment
 	(slot signal (type FLOAT))
@@ -9,12 +10,6 @@
     (slot crumb)
     (slot spaceship)
     (slot direction)    
-)
-
-(deftemplate rover
-    (slot action)
-    (slot signal (type FLOAT))
-	(slot carrying-sample)
 )
 
 (deftemplate action
@@ -27,18 +22,31 @@
     (slot at)
 )
 
-
-(defrule reaction
+(defrule react
     ?this_env <- (environment (signal ?this_signal) (obstacle ?this_obstacle) 
         (sample ?this_sample) (crumb ?this_crumb) (spaceship ?this_spaceship) (direction ?this_direction))
     =>
-	(if	(= ?rover.carrying-sample true) then
-    	(find_base ?this_env)
+    (printout t "Entering jess..." crlf)
+	(if	(= ?carrying true) then
+        (printout t "Rover is carrying sample" crlf)
+        (if (= ?this_direction here) then
+            (if (= ?this_spaceship true) then
+        		(assert (best_action (do drop) (at ?this_direction)))
+                else
+                (assert (action (do nothing) (at here)))
+            )
+        else
+            (printout t "Rover is not carrying sample" crlf)
+    		(find_base ?this_env)
+        )
     else
-     	(if (and (= ?this_direction here) (= ?this_sample true) ) then
-            (assert (best_action (do gather) (at ?this_direction)))
-        	else
-        	(find_sample ?this_env)  
+     	(if (<> ?this_direction here ) then
+            (find_sample ?this_env)
+        	else (if(= ?this_sample true) then
+        		(assert (best_action (do gather) (at ?this_direction)))  
+                else
+                (assert (action (do nothing) (at here)))
+            )
         )   	
     )
     
@@ -48,9 +56,9 @@
 (deffunction find_base(?this_env)
     (if(= ?this_env.spaceship true) then 
      		(assert (action (do drop) (at ?this_env.direction)))
-        else (if (= ?this_env.crumb true) then
+        else (if (and (= ?this_env.crumb true) (<> (opposite_direction ?from))) then
         	(assert (action (do follow_crumbs) (at ?this_env.direction)))
-        else (if (and (> ?this_env.signal ?rover.signal) (= ?this_env.obstacle false)) then
+        else (if (and (> ?this_env.signal ?signal-here) (= ?this_env.obstacle false)) then
                 (assert (action (do follow_signal) (at ?this_env.direction)))
             else (assert (action (do turn_around) (at ?this_env.direction)))
             )
@@ -63,10 +71,10 @@
     	(assert (action (do gather) (at ?this_env.direction)))
     else (if (and (and (> ?this_env.signal 0) (= ?this_env.obstacle false) (= ?this_env.crumb false)))then
         (assert (action (do explore) (at ?this_env.direction))) 
-  	else (if (and (= ?this_env.crumb true) (<> ?came-from ?this_env.direction)) then
+  	else (if (and (= ?this_env.crumb true) (<> (opposite_direction ?from) ?this_env.direction)) then
         (assert (action (do follow_crumbs) (at ?this_env.direction)))
     else (assert (action (do turn_around) (at ?this_env.direction)))
-            )      
+            )       
         )
     )    
 )
@@ -78,8 +86,11 @@
         return left
     else (if (= ?this_dir down) then
         return up
+    else (if (= ?this_dir up) then
+        return down
     else
-        return down            
+    	return ?from 
+                )           
             )
         )    
     )    
@@ -87,17 +98,16 @@
 
 ;clean up
 (defrule clean_up
-    ?current <- (action (do ?do_current) (at here)) 
     ?down <- (action (do ?do_down) (at down)) 
     ?right <- (action (do ?do_right) (at right)) 
     ?up <- (action (do ?do_up) (at up)) 
     ?left <- (action (do ?do_left) (at left)) 
+    ?here <- (action (do ?) (at here))
     =>
-    
-    (if (= ?rover.carrying-sample true) then
-     	(carry_priority ?left ?right ?down ?up ?current)
+    (if (= ?carrying true) then
+     	(carry_priority ?left ?right ?down ?up)
         else 
-        (not_carry_priority ?left ?right ?down ?up ?current)
+        (not_carry_priority ?left ?right ?down ?up)
         (if (> (?explores size) 0) then (random_direction))
     )
     
@@ -105,7 +115,6 @@
     (retract ?right)
     (retract ?down)
     (retract ?up)
-    (retract ?current)
 )
 
 (deffunction random_direction()
@@ -124,24 +133,24 @@
     (retract ?best)
 )
 
-(deffunction not_carry_priority(?left ?right ?down ?up ?current)
+(deffunction not_carry_priority(?left ?right ?down ?up)
     (foreach ?a (create$ gather explore follow_crumbs turn_around)
-        (if (> (?explores size) 0) then return)
-		(foreach ?act (create$ ?left ?right ?down ?up ?current)
+        (if (> (?explores size) 0) then (return))
+		(foreach ?act (create$ ?left ?right ?down ?up)
     		(if (and (= ?act.do ?a) (<> ?a explore)) then
                 (assert (best_action (do ?act.do) (at ?act.at)))
                 (return)
-             else (if (and (= ?act.do ?a ) (<> ?act.at here)) then
-                    (?explores add ?act.at)
-                )
+            )
+            else (if (and (= ?a explore) (= ?a ?act.do)) then
+           		(?explores add ?act.at)	 
             )
         )    
 	)   
 )
 
-(deffunction carry_priority(?left ?right ?down ?up ?current)
+(deffunction carry_priority(?left ?right ?down ?up)
     (foreach ?a (create$ drop follow_crumbs follow_signal turn_around)
-		(foreach ?act (create$ ?left ?right ?down ?up ?current)
+		(foreach ?act (create$ ?left ?right ?down ?up)
             (if(= ?act.do ?a) then
                 (assert (best_action (do ?act.do) (at ?act.at)))
                 (return)

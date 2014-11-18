@@ -33,12 +33,10 @@ public class JessUtil {
         myAgent = agent;
         try {
             jess.batch(jessFile);
-            String rover = "(bind ?rover (assert (rover "
-					+ "(action search) "
-					+ "(signal 0)"
-					+ "(carrying-sample false) "
-					+ ") ) )";     
-            this.makeassert(rover);
+            String carrying = "(bind ?carrying false)";
+            String came = "(bind ?from down)";
+            jess.executeCommand(carrying);
+            jess.executeCommand(came);
             jess.run();
         } catch (JessException ex) {
 
@@ -71,27 +69,13 @@ public class JessUtil {
         else
             dir = "false";
         
+		if(dir.contains("\"")){
+			dir = dir.subSequence(1, dir.length()-1).toString();
+		}
+        
         jess.clearStorage();
-        String cameFrom = "(bind ?came-from " + dir + ")";
-        makeassert(cameFrom);
-        jess.run();
         
         return dir; 
-    }
-    
-    public void BindRover(RoverAgent rover) throws JessException{
-    	String r = "(bind ?rover (assert (rover "
-				+ "(action search) "
-				+ "(signal 0)"
-				+ "(carrying-sample " + rover.hasSample() +") "
-				+ ") ) )";
-    	
-    	System.out.println(r);
-    	
-        this.makeassert(r);
-        jess.run();
-        
-    	
     }
     
     /**
@@ -106,6 +90,8 @@ public class JessUtil {
         if(jess.fetch("act") != null && jess.fetch("dir") != null){
         	act = (String)jess.fetch("act").externalAddressValue(null);
         	dir = (String)jess.fetch("dir").externalAddressValue(null);
+        	String cameFrom = "(bind ?from " + dir + ")";
+        	jess.executeCommand(cameFrom);
         }    
         else{
             act = "false";
@@ -116,16 +102,21 @@ public class JessUtil {
         
         if(dir.equals("here"))
         {
+        	String carry = null;
         	if(act.equals("gather")){
-            	
+            	carry = "(bind ?carrying true)";
+        		
             	Point p = rover.getPosition();
             	World.GetGridCell(p).removeContent(Contents.rock);
             	
                 rover.setHasSample(true);
             }
             else if(act.equals("drop")){
+            	carry = "(bind ?carrying false)";
             	rover.setHasSample(false);
             }
+        	if(carry != null)
+        		jess.executeCommand(carry);
         }
         else
         {
@@ -136,6 +127,7 @@ public class JessUtil {
             	World.GetGridCell(rover.getPosition()).deductNumberOfCrumbs();
             }
         }
+        jess.run();
     }
     
     /**

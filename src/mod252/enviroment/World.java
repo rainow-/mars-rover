@@ -11,10 +11,10 @@ import mod252.utils.RandomGenerator;
 public class World {
 
 	private static Point spaceShipCoordinates; // Space ship coordinates
-	private static int height = 30;
-	private static int width = 30;
-	private static int signalRange = 5;
-	private static int numberOfRocks = 10;
+	private static int height = 10;
+	private static int width = 10;
+	private static int signalRange = 6;
+	private static int numberOfRocks = 2;
 
 	private static GridCell[][] world;
 	
@@ -169,6 +169,10 @@ public class World {
 
 	public static GridCell LookDown(Point p) {
 		return world[p.x][p.y - 1];
+	}
+	
+	public static GridCell LookHere(Point p) {
+		return world[p.x][p.y];
 	}
 	
 	public static GridCell GetGridCell(Point p)

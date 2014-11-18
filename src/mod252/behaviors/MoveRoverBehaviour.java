@@ -26,15 +26,14 @@ public class MoveRoverBehaviour extends CyclicBehaviour {
 	public void action() {
 		
 		GridCell left = World.LookLeft(myAgent.getPosition());
-		GridCell right = World.LookLeft(myAgent.getPosition());
-		GridCell top = World.LookLeft(myAgent.getPosition());
-		GridCell bottom = World.LookLeft(myAgent.getPosition());
-		GridCell current = World.LookLeft(myAgent.getPosition());
+		GridCell right = World.LookRight(myAgent.getPosition());
+		GridCell top = World.LookUp(myAgent.getPosition());
+		GridCell bottom = World.LookDown(myAgent.getPosition());
+		GridCell current = World.LookHere(myAgent.getPosition());
 		
 		try {
 			jessUtil.search(left, right, top, bottom, current);
 			jessUtil.performAction(myAgent);	
-			jessUtil.BindRover(myAgent);
 			String dir = jessUtil.getDirection();
 			
 			if(dir.equals("left"))
